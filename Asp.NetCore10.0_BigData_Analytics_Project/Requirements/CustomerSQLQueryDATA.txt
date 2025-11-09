@@ -1,0 +1,107 @@
+﻿-- =====================================================
+-- 📊 Asp.NetCore10.0_BigData_Analytics_Project
+-- Tablo: Customers
+-- Geliştiren: Yunus İNAN & ChatGPT
+-- Tarih: 2025-11-09
+-- Açıklama: 1000 Türk müşteriyi şehir + ilçe ile üretir.
+-- =====================================================
+
+IF OBJECT_ID('dbo.Customers', 'U') IS NOT NULL
+    DROP TABLE dbo.Customers;
+GO
+
+CREATE TABLE Customers (
+    CustomerID INT IDENTITY(1,1) PRIMARY KEY,
+    CustomerName NVARCHAR(50) NOT NULL,
+    CustomerSurname NVARCHAR(50) NOT NULL,
+    CustomerImageURL NVARCHAR(250),
+    CustomerEmail NVARCHAR(100) NOT NULL UNIQUE,
+    CustomerPhone NVARCHAR(20),
+    CustomerAddress NVARCHAR(250),
+    CustomerCity NVARCHAR(50),
+    CustomerDistrict NVARCHAR(50),
+    CustomerCountry NVARCHAR(50)
+);
+GO
+
+-- =====================================================
+-- 🔁 Veri Üretim Hazırlığı
+-- =====================================================
+DECLARE @i INT = 1;
+
+DECLARE @firstNames TABLE (Name NVARCHAR(50));
+DECLARE @lastNames TABLE (Name NVARCHAR(50));
+DECLARE @cities TABLE (City NVARCHAR(50));
+DECLARE @districts TABLE (City NVARCHAR(50), District NVARCHAR(50));
+
+-- 👤 Türk isimleri
+INSERT INTO @firstNames VALUES
+(N'Ahmet'),(N'Mehmet'),(N'Mustafa'),(N'Ali'),(N'Fatma'),(N'Zeynep'),(N'Elif'),(N'Ayşe'),
+(N'Burak'),(N'Cem'),(N'Can'),(N'Ece'),(N'Selin'),(N'Emre'),(N'Merve'),(N'Ceren'),
+(N'Tolga'),(N'Deniz'),(N'Gizem'),(N'Furkan'),(N'Melis'),(N'Serkan'),(N'Nazlı'),
+(N'Tuba'),(N'Yunus'),(N'Betül'),(N'Berat'),(N'Rabia'),(N'Baran'),(N'Ömer'),
+(N'Esra'),(N'Gamze'),(N'Murat'),(N'Seda'),(N'İrem'),(N'Hakan'),(N'Pelin');
+
+-- 🧬 Türk soyadları
+INSERT INTO @lastNames VALUES
+(N'Demir'),(N'Yılmaz'),(N'Kaya'),(N'Çelik'),(N'Şahin'),(N'Arslan'),(N'Yıldız'),
+(N'Öztürk'),(N'Aydın'),(N'Doğan'),(N'Kılıç'),(N'Aslan'),(N'Güneş'),(N'Polat'),
+(N'Bozkurt'),(N'Tekin'),(N'Koç'),(N'Erdoğan'),(N'Kurt'),(N'Bulut'),(N'Aksoy'),
+(N'Avcı'),(N'Kara'),(N'Taş'),(N'Güler'),(N'Demirtaş'),(N'Çetin'),(N'Özkan'),
+(N'Turan'),(N'Eren');
+
+-- 🏙️ Türkiye şehirleri
+INSERT INTO @cities VALUES
+(N'İstanbul'),(N'Ankara'),(N'İzmir'),(N'Bursa'),(N'Antalya'),(N'Konya'),
+(N'Adana'),(N'Gaziantep'),(N'Samsun'),(N'Tekirdağ'),(N'Eskişehir'),(N'Mersin'),
+(N'Kayseri'),(N'Sakarya'),(N'Trabzon'),(N'Kocaeli'),(N'Balıkesir'),(N'Malatya'),
+(N'Denizli'),(N'Muğla');
+
+-- 🌆 İlçeler (bazı şehirlerden örnek)
+INSERT INTO @districts VALUES
+(N'İstanbul',N'Kadıköy'),(N'İstanbul',N'Beşiktaş'),(N'İstanbul',N'Üsküdar'),(N'İstanbul',N'Bakırköy'),
+(N'Ankara',N'Çankaya'),(N'Ankara',N'Keçiören'),(N'Ankara',N'Etimesgut'),(N'Ankara',N'Mamak'),
+(N'İzmir',N'Bornova'),(N'İzmir',N'Karşıyaka'),(N'İzmir',N'Konak'),(N'İzmir',N'Buca'),
+(N'Bursa',N'Nilüfer'),(N'Bursa',N'Osmangazi'),(N'Bursa',N'Yıldırım'),
+(N'Antalya',N'Muratpaşa'),(N'Antalya',N'Kepez'),(N'Antalya',N'Alanya'),
+(N'Konya',N'Selçuklu'),(N'Konya',N'Meram'),(N'Konya',N'Karatay'),
+(N'Adana',N'Seyhan'),(N'Adana',N'Yüreğir'),(N'Adana',N'Çukurova'),
+(N'Gaziantep',N'Şahinbey'),(N'Gaziantep',N'Şehitkamil'),
+(N'Tekirdağ',N'Süleymanpaşa'),(N'Tekirdağ',N'Çorlu'),(N'Tekirdağ',N'Kapaklı'),
+(N'Kocaeli',N'İzmit'),(N'Kocaeli',N'Gebze'),(N'Kocaeli',N'Darıca'),
+(N'Mersin',N'Toroslar'),(N'Mersin',N'Yenişehir'),(N'Mersin',N'Mezitli'),
+(N'Trabzon',N'Ortahisar'),(N'Trabzon',N'Akçaabat'),(N'Trabzon',N'Yomra'),
+(N'Sakarya',N'Adapazarı'),(N'Sakarya',N'Serdivan'),(N'Sakarya',N'Erenler'),
+(N'Kayseri',N'Melikgazi'),(N'Kayseri',N'Kocasinan'),(N'Kayseri',N'Talas'),
+(N'Muğla',N'Menteşe'),(N'Muğla',N'Fethiye'),(N'Muğla',N'Bodrum');
+
+-- =====================================================
+-- 🔄 1000 Rastgele Kayıt Ekle
+-- =====================================================
+WHILE @i <= 1000
+BEGIN
+    DECLARE @name NVARCHAR(50), @surname NVARCHAR(50), @city NVARCHAR(50),
+            @district NVARCHAR(50), @email NVARCHAR(100),
+            @phone NVARCHAR(20), @address NVARCHAR(250), @img NVARCHAR(250);
+
+    SELECT TOP 1 @name = Name FROM @firstNames ORDER BY NEWID();
+    SELECT TOP 1 @surname = Name FROM @lastNames ORDER BY NEWID();
+    SELECT TOP 1 @city = City FROM @cities ORDER BY NEWID();
+    SELECT TOP 1 @district = District FROM @districts WHERE City = @city ORDER BY NEWID();
+
+    SET @email = LOWER(@name + '.' + @surname + CAST(@i AS NVARCHAR(10)) + '@example.com');
+    SET @phone = '+9053' + RIGHT('0000000' + CAST(ABS(CHECKSUM(NEWID())) % 9999999 AS NVARCHAR(7)), 7);
+    SET @address = @district + N' Mah. No:' + CAST((ABS(CHECKSUM(NEWID())) % 200 + 1) AS NVARCHAR(3)) + ', ' + @city;
+    SET @img = 'https://randomuser.me/api/portraits/' + 
+               CASE WHEN ABS(CHECKSUM(NEWID())) % 2 = 0 THEN 'men/' ELSE 'women/' END + 
+               CAST(ABS(CHECKSUM(NEWID())) % 90 + 1 AS NVARCHAR(3)) + '.jpg';
+
+    INSERT INTO Customers (CustomerName, CustomerSurname, CustomerImageURL, CustomerEmail, CustomerPhone, CustomerAddress, CustomerCity, CustomerDistrict, CustomerCountry)
+    VALUES (@name, @surname, @img, @email, @phone, @address, @city, ISNULL(@district, N'Merkez'), N'Türkiye');
+
+    SET @i += 1;
+END
+GO
+
+-- ✅ Test
+SELECT TOP 1000 * FROM Customers;
