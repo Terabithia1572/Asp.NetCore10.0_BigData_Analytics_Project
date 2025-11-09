@@ -1,19 +1,32 @@
 ﻿<aside id="leftsidebar" class="sidebar">
     <!-- User Info -->
-    <div class="user-info">
-        <div class="image"> <img src="~/nexa/assets/images/xs/avatar1.jpg" width="48" height="48" alt="User" /> </div>
-        <div class="info-container">
-            <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">Yunus İNAN</div>
-            <div class="email">yunus.inan@example.com</div>
-          
+    <div class="user-info d-flex align-items-center gap-2" style="min-width: 0;">
+        <div class="image flex-shrink-0">
+            <img src="~/nexa/assets/images/xs/avatar1.jpg"
+                 width="48" height="48"
+                 class="rounded-circle border"
+                 alt="User" />
+        </div>
+        <div class="info-container overflow-hidden">
+            <div class="name text-truncate fw-semibold"
+                 style="max-width: 150px;"
+                 data-toggle="dropdown"
+                 aria-haspopup="true"
+                 aria-expanded="false"
+                 role="button">
+                Yunus İNAN
+            </div>
+            <div class="email text-truncate text-muted small" style="max-width: 150px;">
+                yunus.inan@example.com
+            </div>
         </div>
     </div>
     <!-- #User Info -->
     <!-- Menu -->
     <div class="menu">
         <ul class="list">
-            <li class="header">MAIN NAVIGATION</li>
-           
+            <li class="header">Ana Menü</li>
+
             <li><a href="widgets.html"><i class="zmdi zmdi-delicious"></i><span>Kategoriler</span> </a></li>
             <li><a href="mail-inbox.html"><i class="zmdi zmdi-shopping-cart"></i><span>Ürünler</span> </a></li>
             <li><a href="blog-dashboard.html"><i class="zmdi zmdi-account"></i><span>Müşteriler</span> </a></li>
@@ -21,8 +34,8 @@
             <li><a href="blog-dashboard.html"><i class="zmdi zmdi-balance"></i><span>İstatistikler</span> </a></li>
             <li><a href="blog-dashboard.html"><i class="zmdi zmdi-chart"></i><span>Grafikler</span> </a></li>
             <li><a href="blog-dashboard.html"><i class="zmdi zmdi-chart-donut"></i><span>Veri Analizi</span> </a></li>
-           
-          
+
+
         </ul>
     </div>
     <!-- #Menu -->
