@@ -1,0 +1,183 @@
+﻿-- =====================================================
+-- 📊 Big Data Analytics Project - EU Customers (v2)
+-- Hazırlayan: Yunus İNAN & ChatGPT
+-- Tarih: 2025-11-09
+-- Açıklama: Gerçek şehir-ilçe eşleşmeleriyle 1000 AB müşterisi.
+-- =====================================================
+
+IF OBJECT_ID('dbo.EU_Customers', 'U') IS NOT NULL
+    DROP TABLE dbo.EU_Customers;
+GO
+
+CREATE TABLE EU_Customers (
+    CustomerID INT IDENTITY(1,1) PRIMARY KEY,
+    CustomerName NVARCHAR(50) NOT NULL,
+    CustomerSurname NVARCHAR(50) NOT NULL,
+    CustomerImageURL NVARCHAR(250),
+    CustomerEmail NVARCHAR(100) NOT NULL UNIQUE,
+    CustomerPhone NVARCHAR(25),
+    CustomerAddress NVARCHAR(250),
+    CustomerCity NVARCHAR(50),
+    CustomerDistrict NVARCHAR(50),
+    CustomerCountry NVARCHAR(50)
+);
+GO
+
+DECLARE @i INT = 1;
+
+DECLARE @countries TABLE (Country NVARCHAR(50));
+DECLARE @cities TABLE (Country NVARCHAR(50), City NVARCHAR(50));
+DECLARE @districts TABLE (Country NVARCHAR(50), City NVARCHAR(50), District NVARCHAR(50));
+DECLARE @firstNames TABLE (Country NVARCHAR(50), Name NVARCHAR(50));
+DECLARE @lastNames TABLE (Country NVARCHAR(50), Name NVARCHAR(50));
+
+-- 🇩🇪 Germany
+INSERT INTO @countries VALUES (N'Germany');
+INSERT INTO @cities VALUES 
+(N'Germany','Berlin'),(N'Germany','Munich'),(N'Germany','Hamburg'),(N'Germany','Cologne'),(N'Germany','Frankfurt');
+INSERT INTO @districts VALUES
+(N'Germany','Berlin','Charlottenburg'),(N'Germany','Berlin','Kreuzberg'),(N'Germany','Berlin','Mitte'),
+(N'Germany','Munich','Schwabing'),(N'Germany','Munich','Bogenhausen'),
+(N'Germany','Hamburg','Altona'),(N'Germany','Hamburg','Eimsbüttel'),
+(N'Germany','Cologne','Ehrenfeld'),(N'Germany','Cologne','Lindenthal'),
+(N'Germany','Frankfurt','Sachsenhausen'),(N'Germany','Frankfurt','Bornheim');
+INSERT INTO @firstNames VALUES 
+(N'Germany','Lukas'),(N'Germany','Anna'),(N'Germany','Jonas'),(N'Germany','Lea'),(N'Germany','Maximilian'),(N'Germany','Sophie');
+INSERT INTO @lastNames VALUES 
+(N'Germany','Müller'),(N'Germany','Schmidt'),(N'Germany','Schneider'),(N'Germany','Fischer'),(N'Germany','Weber');
+
+-- 🇫🇷 France
+INSERT INTO @countries VALUES (N'France');
+INSERT INTO @cities VALUES 
+(N'France','Paris'),(N'France','Lyon'),(N'France','Marseille'),(N'France','Nice'),(N'France','Toulouse');
+INSERT INTO @districts VALUES
+(N'France','Paris','Montmartre'),(N'France','Paris','Le Marais'),(N'France','Paris','Latin Quarter'),
+(N'France','Lyon','Croix-Rousse'),(N'France','Lyon','Confluence'),
+(N'France','Marseille','Le Panier'),(N'France','Marseille','La Joliette'),
+(N'France','Nice','Vieux Nice'),(N'France','Nice','Cimiez'),
+(N'France','Toulouse','Capitole'),(N'France','Toulouse','Saint-Cyprien');
+INSERT INTO @firstNames VALUES 
+(N'France','Pierre'),(N'France','Marie'),(N'France','Jean'),(N'France','Camille'),(N'France','Luc'),(N'France','Sophie');
+INSERT INTO @lastNames VALUES 
+(N'France','Dubois'),(N'France','Moreau'),(N'France','Laurent'),(N'France','Lefevre'),(N'France','Roux');
+
+-- 🇪🇸 Spain
+INSERT INTO @countries VALUES (N'Spain');
+INSERT INTO @cities VALUES 
+(N'Spain','Madrid'),(N'Spain','Barcelona'),(N'Spain','Valencia'),(N'Spain','Seville'),(N'Spain','Bilbao');
+INSERT INTO @districts VALUES
+(N'Spain','Madrid','Salamanca'),(N'Spain','Madrid','Chamberí'),
+(N'Spain','Barcelona','Eixample'),(N'Spain','Barcelona','Gràcia'),
+(N'Spain','Valencia','Ciutat Vella'),(N'Spain','Valencia','Ruzafa'),
+(N'Spain','Seville','Triana'),(N'Spain','Seville','Macarena'),
+(N'Spain','Bilbao','Abando'),(N'Spain','Bilbao','Deusto');
+INSERT INTO @firstNames VALUES 
+(N'Spain','Carlos'),(N'Spain','Maria'),(N'Spain','Jose'),(N'Spain','Lucia'),(N'Spain','Antonio'),(N'Spain','Sofia');
+INSERT INTO @lastNames VALUES 
+(N'Spain','Garcia'),(N'Spain','Martinez'),(N'Spain','Lopez'),(N'Spain','Rodriguez'),(N'Spain','Hernandez');
+
+-- 🇮🇹 Italy
+INSERT INTO @countries VALUES (N'Italy');
+INSERT INTO @cities VALUES 
+(N'Italy','Rome'),(N'Italy','Milan'),(N'Italy','Naples'),(N'Italy','Turin'),(N'Italy','Florence');
+INSERT INTO @districts VALUES
+(N'Italy','Rome','Trastevere'),(N'Italy','Rome','Monti'),
+(N'Italy','Milan','Brera'),(N'Italy','Milan','Navigli'),
+(N'Italy','Naples','Vomero'),(N'Italy','Naples','Posillipo'),
+(N'Italy','Turin','San Salvario'),(N'Italy','Turin','Crocetta'),
+(N'Italy','Florence','Oltrarno'),(N'Italy','Florence','Santa Croce');
+INSERT INTO @firstNames VALUES 
+(N'Italy','Giuseppe'),(N'Italy','Francesca'),(N'Italy','Luca'),(N'Italy','Chiara'),(N'Italy','Marco'),(N'Italy','Elena');
+INSERT INTO @lastNames VALUES 
+(N'Italy','Rossi'),(N'Italy','Russo'),(N'Italy','Ferrari'),(N'Italy','Esposito'),(N'Italy','Bianchi');
+
+-- 🇳🇱 Netherlands
+INSERT INTO @countries VALUES (N'Netherlands');
+INSERT INTO @cities VALUES 
+(N'Netherlands','Amsterdam'),(N'Netherlands','Rotterdam'),(N'Netherlands','Utrecht'),(N'Netherlands','Eindhoven'),(N'Netherlands','Groningen');
+INSERT INTO @districts VALUES
+(N'Netherlands','Amsterdam','Jordaan'),(N'Netherlands','Amsterdam','De Pijp'),
+(N'Netherlands','Rotterdam','Kralingen'),(N'Netherlands','Rotterdam','Delfshaven'),
+(N'Netherlands','Utrecht','Binnenstad'),(N'Netherlands','Utrecht','Lombok'),
+(N'Netherlands','Eindhoven','Stratum'),(N'Netherlands','Eindhoven','Tongelre'),
+(N'Netherlands','Groningen','Binnenstad'),(N'Netherlands','Groningen','Oosterpoort');
+INSERT INTO @firstNames VALUES 
+(N'Netherlands','Daan'),(N'Netherlands','Emma'),(N'Netherlands','Lars'),(N'Netherlands','Julia'),(N'Netherlands','Finn'),(N'Netherlands','Anna');
+INSERT INTO @lastNames VALUES 
+(N'Netherlands','de Jong'),(N'Netherlands','Jansen'),(N'Netherlands','Bakker'),(N'Netherlands','Visser'),(N'Netherlands','Smit');
+
+-- 🇸🇪 Sweden
+INSERT INTO @countries VALUES (N'Sweden');
+INSERT INTO @cities VALUES 
+(N'Sweden','Stockholm'),(N'Sweden','Gothenburg'),(N'Sweden','Malmö'),(N'Sweden','Uppsala'),(N'Sweden','Västerås');
+INSERT INTO @districts VALUES
+(N'Sweden','Stockholm','Södermalm'),(N'Sweden','Stockholm','Östermalm'),
+(N'Sweden','Gothenburg','Haga'),(N'Sweden','Gothenburg','Majorna'),
+(N'Sweden','Malmö','Gamla Staden'),(N'Sweden','Malmö','Västra Hamnen'),
+(N'Sweden','Uppsala','Flogsta'),(N'Sweden','Uppsala','Kungsängen'),
+(N'Sweden','Västerås','Centrum'),(N'Sweden','Västerås','Skiljebo');
+INSERT INTO @firstNames VALUES 
+(N'Sweden','Erik'),(N'Sweden','Anna'),(N'Sweden','Lars'),(N'Sweden','Emma'),(N'Sweden','Karl'),(N'Sweden','Sara');
+INSERT INTO @lastNames VALUES 
+(N'Sweden','Johansson'),(N'Sweden','Andersson'),(N'Sweden','Karlsson'),(N'Sweden','Nilsson'),(N'Sweden','Eriksson');
+
+-- 🇵🇱 Poland
+INSERT INTO @countries VALUES (N'Poland');
+INSERT INTO @cities VALUES 
+(N'Poland','Warsaw'),(N'Poland','Krakow'),(N'Poland','Wroclaw'),(N'Poland','Gdansk'),(N'Poland','Poznan');
+INSERT INTO @districts VALUES
+(N'Poland','Warsaw','Śródmieście'),(N'Poland','Warsaw','Mokotów'),
+(N'Poland','Krakow','Kazimierz'),(N'Poland','Krakow','Podgórze'),
+(N'Poland','Wroclaw','Stare Miasto'),(N'Poland','Wroclaw','Krzyki'),
+(N'Poland','Gdansk','Wrzeszcz'),(N'Poland','Gdansk','Oliwa'),
+(N'Poland','Poznan','Jeżyce'),(N'Poland','Poznan','Wilda');
+INSERT INTO @firstNames VALUES 
+(N'Poland','Jakub'),(N'Poland','Anna'),(N'Poland','Piotr'),(N'Poland','Katarzyna'),(N'Poland','Marek'),(N'Poland','Magdalena');
+INSERT INTO @lastNames VALUES 
+(N'Poland','Nowak'),(N'Poland','Kowalski'),(N'Poland','Wisniewski'),(N'Poland','Wojcik'),(N'Poland','Kaczmarek');
+
+-- 🇬🇷 Greece
+INSERT INTO @countries VALUES (N'Greece');
+INSERT INTO @cities VALUES 
+(N'Greece','Athens'),(N'Greece','Thessaloniki'),(N'Greece','Patras'),(N'Greece','Heraklion'),(N'Greece','Larissa');
+INSERT INTO @districts VALUES
+(N'Greece','Athens','Plaka'),(N'Greece','Athens','Kolonaki'),
+(N'Greece','Thessaloniki','Ano Poli'),(N'Greece','Thessaloniki','Toumba'),
+(N'Greece','Patras','Psarofai'),(N'Greece','Patras','Agios Georgios'),
+(N'Greece','Heraklion','Nea Alikarnassos'),(N'Greece','Heraklion','Poros'),
+(N'Greece','Larissa','Neapoli'),(N'Greece','Larissa','Agios Konstantinos');
+INSERT INTO @firstNames VALUES 
+(N'Greece','Giorgos'),(N'Greece','Maria'),(N'Greece','Nikos'),(N'Greece','Eleni'),(N'Greece','Kostas'),(N'Greece','Sophia');
+INSERT INTO @lastNames VALUES 
+(N'Greece','Papadopoulos'),(N'Greece','Nikolaidis'),(N'Greece','Georgiou'),(N'Greece','Christodoulou'),(N'Greece','Papanikolaou');
+
+-- =====================================================
+-- 🔄 1000 rastgele kayıt
+-- =====================================================
+WHILE @i <= 1000
+BEGIN
+    DECLARE @country NVARCHAR(50), @city NVARCHAR(50), @district NVARCHAR(50),
+            @fname NVARCHAR(50), @lname NVARCHAR(50),
+            @email NVARCHAR(100), @phone NVARCHAR(25), @addr NVARCHAR(250), @img NVARCHAR(250);
+
+    SELECT TOP 1 @country = Country FROM @countries ORDER BY NEWID();
+    SELECT TOP 1 @city = City FROM @cities WHERE Country = @country ORDER BY NEWID();
+    SELECT TOP 1 @district = District FROM @districts WHERE Country=@country AND City=@city ORDER BY NEWID();
+    SELECT TOP 1 @fname = Name FROM @firstNames WHERE Country=@country ORDER BY NEWID();
+    SELECT TOP 1 @lname = Name FROM @lastNames WHERE Country=@country ORDER BY NEWID();
+
+    SET @email = LOWER(@fname + '.' + @lname + CAST(@i AS NVARCHAR(10)) + '@example.com');
+    SET @phone = '+3' + CAST(ABS(CHECKSUM(NEWID())) % 999999999 AS NVARCHAR(15));
+    SET @addr = @district + N' St. No:' + CAST((ABS(CHECKSUM(NEWID())) % 100 + 1) AS NVARCHAR(3)) + ', ' + @city;
+    SET @img = 'https://randomuser.me/api/portraits/' + 
+               CASE WHEN ABS(CHECKSUM(NEWID())) % 2 = 0 THEN 'men/' ELSE 'women/' END + 
+               CAST(ABS(CHECKSUM(NEWID())) % 90 + 1 AS NVARCHAR(3)) + '.jpg';
+
+    INSERT INTO EU_Customers (CustomerName,CustomerSurname,CustomerImageURL,CustomerEmail,CustomerPhone,CustomerAddress,CustomerCity,CustomerDistrict,CustomerCountry)
+    VALUES (@fname,@lname,@img,@email,@phone,@addr,@city,@district,@country);
+
+    SET @i += 1;
+END
+GO
+
+SELECT TOP 20 * FROM EU_Customers;
