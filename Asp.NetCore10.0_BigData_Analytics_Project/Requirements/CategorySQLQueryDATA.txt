@@ -1,0 +1,79 @@
+﻿-- =====================================================
+-- 📊 Big Data Analytics Project - Category Tablosu (Final)
+-- Geliştiren: Yunus İNAN & ChatGPT
+-- Tarih: 2025-11-09
+-- Açıklama: 500.000 ürün için 10 ana kategori.
+-- =====================================================
+
+IF OBJECT_ID('dbo.Categories', 'U') IS NOT NULL
+    DROP TABLE dbo.Categories;
+GO
+
+CREATE TABLE Categories (
+    CategoryID INT IDENTITY(1,1) PRIMARY KEY,
+    CategoryName NVARCHAR(100) NOT NULL,
+    CategoryDescription NVARCHAR(250),
+    CategoryImageURL NVARCHAR(250),
+    IsActive BIT DEFAULT 1,
+    CreatedDate DATETIME DEFAULT GETDATE()
+);
+GO
+
+-- ==============================================
+-- 🧩 10 Ana Kategori Ekleme
+-- ==============================================
+INSERT INTO Categories (CategoryName, CategoryDescription, CategoryImageURL)
+VALUES
+-- 1️⃣ Elektronik
+(N'Elektronik', 
+ N'Akıllı telefonlar, dizüstü bilgisayarlar, televizyonlar, kulaklıklar ve diğer teknolojik cihazlar.',
+ N'/images/categories/elektronik.jpg'),
+
+-- 2️⃣ Ev ve Yaşam
+(N'Ev ve Yaşam', 
+ N'Beyaz eşyalar, mutfak aletleri, ev dekorasyonu ve günlük yaşam ürünleri.',
+ N'/images/categories/ev-ve-yasam.jpg'),
+
+-- 3️⃣ Moda
+(N'Moda', 
+ N'Kadın, erkek ve çocuk giyim ürünleri, ayakkabılar ve aksesuarlar.',
+ N'/images/categories/moda.jpg'),
+
+-- 4️⃣ Kozmetik
+(N'Kozmetik', 
+ N'Parfümler, makyaj ürünleri, cilt bakım ve kişisel bakım malzemeleri.',
+ N'/images/categories/kozmetik.jpg'),
+
+-- 5️⃣ Spor ve Outdoor
+(N'Spor ve Outdoor', 
+ N'Kamp malzemeleri, spor ekipmanları, bisiklet, fitness ve doğa ürünleri.',
+ N'/images/categories/spor.jpg'),
+
+-- 6️⃣ Otomotiv ve Aksesuar
+(N'Otomotiv ve Aksesuar', 
+ N'Araç bakım ürünleri, motor yağları, araç içi aksesuarlar ve lastikler.',
+ N'/images/categories/otomotiv.jpg'),
+
+-- 7️⃣ Kitap ve Kırtasiye
+(N'Kitap ve Kırtasiye', 
+ N'Romanlar, eğitim kitapları, defter, kalem, ofis ve okul gereçleri.',
+ N'/images/categories/kitap.jpg'),
+
+-- 8️⃣ Gıda ve İçecek
+(N'Gıda ve İçecek', 
+ N'Kahve, çay, çikolata, atıştırmalıklar, bakliyat ve içecek ürünleri.',
+ N'/images/categories/gida.jpg'),
+
+-- 9️⃣ Oyuncak ve Çocuk
+(N'Oyuncak ve Çocuk', 
+ N'Bebek ürünleri, çocuk oyuncakları, zekâ geliştirici setler ve çocuk kitapları.',
+ N'/images/categories/oyuncak.jpg'),
+
+-- 🔟 Sağlık ve Kişisel Bakım
+(N'Sağlık ve Kişisel Bakım', 
+ N'Vitaminler, medikal ürünler, diş bakım, tıraş ve kişisel hijyen ürünleri.',
+ N'/images/categories/saglik.jpg');
+GO
+
+-- ✅ Test
+SELECT * FROM Categories;
