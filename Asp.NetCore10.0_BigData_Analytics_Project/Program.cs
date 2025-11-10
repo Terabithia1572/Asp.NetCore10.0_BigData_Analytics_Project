@@ -1,7 +1,14 @@
+using Asp.NetCore10._0_BigData_Analytics_Project.Context;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<BigDataOrdersDBContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("BigDataOrdersConnectionString")); //Veritabaný baðlantý dizesi
+})
 
 var app = builder.Build();
 
