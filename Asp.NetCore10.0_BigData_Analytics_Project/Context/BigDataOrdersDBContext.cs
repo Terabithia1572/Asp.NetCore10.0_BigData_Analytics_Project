@@ -11,6 +11,7 @@ namespace Asp.NetCore10._0_BigData_Analytics_Project.Context
         }
 
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Product> Products { get; set; }
 
     }
 }
