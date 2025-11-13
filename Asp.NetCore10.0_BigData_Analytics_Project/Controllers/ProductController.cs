@@ -1,6 +1,7 @@
 ﻿using Asp.NetCore10._0_BigData_Analytics_Project.Context;
 using Asp.NetCore10._0_BigData_Analytics_Project.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Asp.NetCore10._0_BigData_Analytics_Project.Controllers
 {
@@ -26,9 +27,19 @@ namespace Asp.NetCore10._0_BigData_Analytics_Project.Controllers
 
         //Yani “Controller kendi başına new ile context oluşturmaz, dışarıdan alır.”
 
-        public IActionResult ProductList()
+        public IActionResult ProductList(int page=1)
         {
-            var values = _context.Products.ToList(); //_context üzerinden Products tablosuna erişip, tüm kayıtları liste olarak alıyoruz.
+            int pageSize = 12; // her sayfada 12 kayıt
+            var values = _context.Products //_context üzerinden Products tablosuna erişip, tüm kayıtları liste olarak alıyoruz.
+                                 .OrderBy(p => p.ProductID) // Kayıtları ProductID'ye göre sıralıyoruz.
+                                 .Skip((page - 1) * pageSize) // Sayfalama için gerekli kayıtlardan önceki kayıtları atlıyoruz.
+                                 .Take(pageSize) // Say
+                                 .Include(y => y.Category) // Category tablosunu da dahil ediyoruz.
+                                 .ToList(); // Sonuçları liste olarak alıyoruz.
+
+            int totalCount = _context.Products.Count(); // Toplam kayıt sayısını alıyoruz.
+            ViewBag.TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize); // Toplam sayfa sayısını hesaplıyoruz.
+            ViewBag.CurrentPage = page; // Mevcut sayfa numarasını ViewBag'e atıyoruz.
             return View(values); // View'e bu listeyi gönderiyoruz.
         }
         [HttpGet]
