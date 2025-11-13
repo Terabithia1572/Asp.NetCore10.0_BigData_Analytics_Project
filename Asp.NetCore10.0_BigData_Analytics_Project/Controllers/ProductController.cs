@@ -1,6 +1,7 @@
 ﻿using Asp.NetCore10._0_BigData_Analytics_Project.Context;
 using Asp.NetCore10._0_BigData_Analytics_Project.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Asp.NetCore10._0_BigData_Analytics_Project.Controllers
@@ -45,6 +46,15 @@ namespace Asp.NetCore10._0_BigData_Analytics_Project.Controllers
         [HttpGet]
         public IActionResult CreateProduct()
         {
+            var categoryList = _context.Categories
+         .Select(x => new SelectListItem
+         {
+             Text = x.CategoryName,
+             Value = x.CategoryID.ToString()
+         })
+         .ToList();
+
+            ViewBag.CategoryList = categoryList;
             return View();
         }
         [HttpPost]
@@ -65,6 +75,15 @@ namespace Asp.NetCore10._0_BigData_Analytics_Project.Controllers
         [HttpGet]
         public IActionResult UpdateProduct(int id)
         {
+            var categoryList = _context.Categories
+                              .Select(x => new SelectListItem
+                              {
+                                  Text = x.CategoryName,
+                                  Value = x.CategoryID.ToString()
+                              })
+                              .ToList();
+
+            ViewBag.CategoryList = categoryList;
             var values = _context.Products.Find(id); // ID'ye göre kategoriyi buluyoruz.
             return View(values); // Kategoriyi View'e gönderiyoruz.
         }
