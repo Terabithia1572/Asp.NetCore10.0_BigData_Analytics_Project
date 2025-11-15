@@ -37,5 +37,11 @@ namespace Asp.NetCore10._0_BigData_Analytics_Project.Controllers
 
             return View();
         }
+        public IActionResult TextualStatistics()
+        {
+            ViewBag.MostExpensiveProduct = _context.Products.Where(x => x.UnitPrice == (_context.Products.Max(x => x.UnitPrice))).Select(y => y.ProductName).FirstOrDefault();
+            ViewBag.CheapestProduct = _context.Products.Where(x => x.UnitPrice == (_context.Products.Min(y => y.UnitPrice))).Select(z => z.ProductName).FirstOrDefault();
+            return View();
+        }
     }
 }
