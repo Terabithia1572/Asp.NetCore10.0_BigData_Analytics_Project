@@ -39,8 +39,24 @@ namespace Asp.NetCore10._0_BigData_Analytics_Project.Controllers
         }
         public IActionResult TextualStatistics()
         {
-            ViewBag.MostExpensiveProduct = _context.Products.Where(x => x.UnitPrice == (_context.Products.Max(x => x.UnitPrice))).Select(y => y.ProductName).FirstOrDefault();
-            ViewBag.CheapestProduct = _context.Products.Where(x => x.UnitPrice == (_context.Products.Min(y => y.UnitPrice))).Select(z => z.ProductName).FirstOrDefault();
+            ViewBag.MostExpensiveProduct = _context.Products.Where(x => x.UnitPrice == (_context.Products.Max(x => x.UnitPrice))).Select(y => y.ProductName).FirstOrDefault(); //En pahalı ürün
+            ViewBag.CheapestProduct = _context.Products.Where(x => x.UnitPrice == (_context.Products.Min(y => y.UnitPrice))).Select(z => z.ProductName).FirstOrDefault(); //En ucuz ürün
+
+
+            ViewBag.TopStockProduct = _context.Products.OrderByDescending(x => x.StockQuantity).Take(1).Select(y => y.ProductName).FirstOrDefault(); //En yüksek stoklu ürün
+
+            ViewBag.LowestStockProduct = _context.Products.OrderBy(x => x.StockQuantity).Take(1).Select(y => y.ProductName).FirstOrDefault(); //En düşük stoklu ürün
+
+            ViewBag.LastAddedProduct = _context.Products.OrderByDescending(x => x.ProductID).Take(1).Select(y => y.ProductName).FirstOrDefault(); //Son eklenen ürün
+
+            ViewBag.LastAddedCustomer = _context.Customers.OrderByDescending(x => x.CustomerID).Take(1).Select(y => y.CustomerName + " " + y.CustomerSurname).FirstOrDefault(); //Son eklenen müşteri
+
+            ViewBag.TopPaymentMethod = _context.Orders.GroupBy(o => o.PaymentMethod).Select(g => new 
+            {
+                PaymentMethod = g.Key,
+                TotalOrders = g.Count(),
+            }).OrderByDescending(x => x.TotalOrders).Select(y => y.PaymentMethod).FirstOrDefault(); //En çok kullanılan ödeme yöntemi
+
             return View();
         }
     }
