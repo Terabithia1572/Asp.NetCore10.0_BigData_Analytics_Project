@@ -1,5 +1,6 @@
 ﻿using Asp.NetCore10._0_BigData_Analytics_Project.Context;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Asp.NetCore10._0_BigData_Analytics_Project.Controllers
 {
@@ -23,6 +24,16 @@ namespace Asp.NetCore10._0_BigData_Analytics_Project.Controllers
             ViewBag.CustomerCity = _context.Customers.Select(x => x.CustomerCity).Distinct().Count(); // Müşteriye ait Farklı şehir sayısı
             ViewBag.OrderStatusByCompleted = _context.Orders.Where(x => x.OrderStatus == "Teslim Edildi").Count();
             ViewBag.OrderStatusByCancelled = _context.Orders.Where(x => x.OrderStatus == "Kargoda").Count();
+
+            ViewBag.OctoberOrders = _context.Orders
+   .FromSqlRaw("SELECT * FROM Orders WHERE OrderDate >= '2025-10-01' AND OrderDate < '2025-11-01'")
+   .Count();
+
+            ViewBag.Orders2025Count = _context.Orders.Where(x => x.OrderDate.Year == 2025).Count();
+
+            ViewBag.AverageProductPrice = _context.Products.Average(x => x.UnitPrice);
+            ViewBag.AverageProductQuantity = _context.Products.Average(x => x.StockQuantity);
+
 
             return View();
         }
