@@ -33,8 +33,8 @@
                         <i class="zmdi zmdi-trending-up" style="font-size:34px; color:white;"></i>
                     </div>
                     <div class="content col-12 text-center" style="margin-top:2px;">
-                        <div class="text">USAGE</div>
-                        <div class="number">98%</div>
+                        <div class="text">Kategori Sayısı</div>
+                        <div class="number">@ViewBag.CategoryCount</div>
                     </div>
                 </div>
             </div>
@@ -48,8 +48,8 @@
                         <i class="zmdi zmdi-eye" style="font-size:34px; color:white;"></i>
                     </div>
                     <div class="content col-12 text-center" style="margin-top:2px;">
-                        <div class="text">IMPRESSIONS</div>
-                        <div class="number">457 512</div>
+                        <div class="text">Müşteri Sayısı</div>
+                        <div class="number">@ViewBag.CustomerCount</div>
                     </div>
                 </div>
             </div>
@@ -63,8 +63,8 @@
                         <i class="zmdi zmdi-shopping-cart" style="font-size:34px; color:white;"></i>
                     </div>
                     <div class="content col-12 text-center" style="margin-top:2px;">
-                        <div class="text">TOTAL SALES</div>
-                        <div class="number">$125 543</div>
+                        <div class="text">Ürün Sayısı</div>
+                        <div class="number">@ViewBag.ProductCount</div>
                     </div>
                 </div>
             </div>
@@ -78,12 +78,16 @@
                         <i class="zmdi zmdi-balance" style="font-size:34px; color:white;"></i>
                     </div>
                     <div class="content col-12 text-center" style="margin-top:2px;">
-                        <div class="text">CURRENCY</div>
-                        <div class="number">$1 063</div>
+                        <div class="text">Sipariş Sayısı</div>
+                        <div class="number">@ViewBag.OrderCount</div>
                     </div>
                 </div>
             </div>
         </div>
+
+    </div>
+    <div class="row clearfix">
+
         <!-- 5. Kart - CUSTOMERS -->
         <div class="col-lg-3 col-md-6 col-sm-12">
             <div class="card info-box-2 l-amber">
@@ -92,12 +96,13 @@
                         <i class="zmdi zmdi-accounts" style="font-size:34px; color:white;"></i>
                     </div>
                     <div class="content col-12 text-center" style="margin-top:2px;">
-                        <div class="text">CUSTOMERS</div>
-                        <div class="number">12 345</div>
+                        <div class="text">Ülke Sayısı</div>
+                        <div class="number">@ViewBag.CustomerCount</div>
                     </div>
                 </div>
             </div>
         </div>
+
         <!-- 6. Kart - PRODUCTS -->
         <div class="col-lg-3 col-md-6 col-sm-12">
             <div class="card info-box-2 l-salmon">
@@ -106,22 +111,23 @@
                         <i class="zmdi zmdi-label" style="font-size:34px; color:white;"></i>
                     </div>
                     <div class="content col-12 text-center" style="margin-top:2px;">
-                        <div class="text">PRODUCTS</div>
-                        <div class="number">18 932</div>
+                        <div class="text">Şehir Sayısı</div>
+                        <div class="number">@ViewBag.CustomerCity</div>
                     </div>
                 </div>
             </div>
         </div>
+
         <!-- 7. Kart - ORDERS -->
         <div class="col-lg-3 col-md-6 col-sm-12">
-            <div class="card info-box-2 l-teal">
+            <div class="card info-box-2" style="background: linear-gradient(to right, #a18cd1, #fbc2eb);">
                 <div class="body" style="padding:10px 0 8px 0;">
                     <div class="icon" style="display:flex; align-items:center; justify-content:center; height:45px;">
                         <i class="zmdi zmdi-shopping-basket" style="font-size:34px; color:white;"></i>
                     </div>
                     <div class="content col-12 text-center" style="margin-top:2px;">
-                        <div class="text">ORDERS</div>
-                        <div class="number">503 224</div>
+                        <div class="text">Teslim Edilen Siparişler</div>
+                        <div class="number">@ViewBag.OrderStatusByCompleted</div>
                     </div>
                 </div>
             </div>
@@ -129,18 +135,19 @@
 
         <!-- 8. Kart - SUPPORT TICKETS -->
         <div class="col-lg-3 col-md-6 col-sm-12">
-            <div class="card info-box-2 l-purple">
+            <div class="card info-box-2" style="background: linear-gradient(to right, #f6d365, #fda085);">
                 <div class="body" style="padding:10px 0 8px 0;">
                     <div class="icon" style="display:flex; align-items:center; justify-content:center; height:45px;">
                         <i class="zmdi zmdi-headset-mic" style="font-size:34px; color:white;"></i>
                     </div>
                     <div class="content col-12 text-center" style="margin-top:2px;">
-                        <div class="text">SUPPORT TICKETS</div>
-                        <div class="number">1 209</div>
+                        <div class="text">Kargoda olan Siparişler</div>
+                        <div class="number">@ViewBag.OrderStatusByCancelled</div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </section>
 
