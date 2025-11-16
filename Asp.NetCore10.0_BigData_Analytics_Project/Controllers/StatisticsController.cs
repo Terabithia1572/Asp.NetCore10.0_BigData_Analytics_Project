@@ -56,6 +56,30 @@ namespace Asp.NetCore10._0_BigData_Analytics_Project.Controllers
                 PaymentMethod = g.Key,
                 TotalOrders = g.Count(),
             }).OrderByDescending(x => x.TotalOrders).Select(y => y.PaymentMethod).FirstOrDefault(); //En çok kullanılan ödeme yöntemi
+            ViewBag.TopOrderedProduct = _context.Orders.GroupBy(o => o.Product.ProductName).Select(g => new
+            {
+                ProductName = g.Key,
+                TotalQuantity = g.Sum(o => o.Quantity)
+            }).OrderByDescending(x => x.TotalQuantity).Select(y => y.ProductName).FirstOrDefault(); // En çok sipariş edilen ürün
+
+            ViewBag.MinOrderedProduct = _context.Orders.GroupBy(o => o.Product.ProductName).Select(g => new
+            {
+                ProductName = g.Key,
+                TotalQuantity = g.Sum(o => o.Quantity)
+            }).OrderBy(x => x.TotalQuantity).Select(y => y.ProductName).FirstOrDefault(); // En az sipariş edilen ürün
+
+            ViewBag.TopCountry = _context.Orders.GroupBy(o => o.Customer.CustomerCountry).Select(g => new
+            {
+                Country = g.Key,
+                TotalOrders = g.Count()
+            })
+         .OrderByDescending(x => x.TotalOrders).Select(x => x.Country).FirstOrDefault(); // En çok sipariş veren ülke
+
+            ViewBag.TopCity = _context.Orders.GroupBy(o => o.Customer.CustomerCity).Select(g => new
+            {
+                City = g.Key,
+                TotalOrders = g.Count()
+            }).OrderByDescending(x => x.TotalOrders).Select(x => x.City).FirstOrDefault(); // En çok sipariş veren şehir
 
             return View();
         }
