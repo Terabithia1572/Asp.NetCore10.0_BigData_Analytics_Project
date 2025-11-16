@@ -102,6 +102,20 @@ namespace Asp.NetCore10._0_BigData_Analytics_Project.Controllers
                 TotalOrders = g.Count()
             }).OrderByDescending(x => x.TotalOrders).Select(x => x.FullName).FirstOrDefault(); // En çok sipariş veren müşteri
 
+            ViewBag.MostCompletedProduct = _context.Orders.Where(o => o.OrderStatus == "Teslim Edildi").GroupBy(o => o.Product.ProductName)
+           .Select(g => new
+           {
+               ProductName = g.Key,
+               CompletedOrders = g.Count()
+           }).OrderByDescending(x => x.CompletedOrders).Select(x => x.ProductName).FirstOrDefault(); // En çok tamamlanan ürün
+
+            ViewBag.TopReturnedProduct = _context.Orders.Where(o => o.OrderStatus == "Hazırlanıyor").GroupBy(o => o.Product.ProductName)
+          .Select(g => new
+          {
+              ProductName = g.Key,
+              CompletedOrders = g.Count()
+          }).OrderByDescending(x => x.CompletedOrders).Select(x => x.ProductName).FirstOrDefault(); // En çok iade edilen ürün
+
             return View();
         }
     }
