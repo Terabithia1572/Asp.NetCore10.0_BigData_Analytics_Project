@@ -81,6 +81,27 @@ namespace Asp.NetCore10._0_BigData_Analytics_Project.Controllers
                 TotalOrders = g.Count()
             }).OrderByDescending(x => x.TotalOrders).Select(x => x.City).FirstOrDefault(); // En çok sipariş veren şehir
 
+            ViewBag.TopCategory = _context.Orders.GroupBy(o => o.Product.Category.CategoryName)
+           .Select(g => new
+           {
+               CategoryName = g.Key,
+               TotalSales = g.Sum(x => x.Quantity)
+           }).OrderByDescending(x => x.TotalSales).Select(x => x.CategoryName).FirstOrDefault(); // En çok satan kategori
+
+            ViewBag.LowestActiveCategory = _context.Orders.GroupBy(o => o.Product.Category.CategoryName)
+          .Select(g => new
+          {
+              CategoryName = g.Key,
+              TotalSales = g.Sum(x => x.Quantity)
+          }).OrderBy(x => x.TotalSales).Select(x => x.CategoryName).FirstOrDefault(); // En az satan kategori
+
+            ViewBag.TopCustomer = _context.Orders.GroupBy(o => new { o.Customer.CustomerName, o.Customer.CustomerSurname })
+            .Select(g => new
+            {
+                FullName = g.Key.CustomerName + " " + g.Key.CustomerSurname,
+                TotalOrders = g.Count()
+            }).OrderByDescending(x => x.TotalOrders).Select(x => x.FullName).FirstOrDefault(); // En çok sipariş veren müşteri
+
             return View();
         }
     }
