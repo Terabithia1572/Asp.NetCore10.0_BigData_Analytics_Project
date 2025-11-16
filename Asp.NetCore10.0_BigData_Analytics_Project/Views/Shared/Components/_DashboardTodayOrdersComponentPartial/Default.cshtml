@@ -1,10 +1,10 @@
-﻿@model List<Order>
+﻿@model List<OrderSummaryViewModel>
 
 <div class="row clearfix">
     <div class="col-sm-12 col-md-12 col-lg-12">
         <div class="card">
             <div class="header">
-                <h2>Members Profiles <small>Members Preformance / Monthly Status</small> </h2>
+                <h2>Bugünkü Siparişler <small>Bugün Verilen Son 5 Sipariş</small> </h2>
                 <ul class="header-dropdown m-r--5">
                     <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <i class="zmdi zmdi-more-vert"></i> </a>
@@ -20,126 +20,72 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th style="width:60px;">Member</th>
-                            <th>Name</th>
-                            <th>Earnings</th>
-                            <th>Sales</th>
-                            <th>Reviews</th>
-                            <th>Progress</th>
+                            <th>Müşteri</th>
+                            <th>Ürün</th>
+                            <th>Birim Fiyat / €</th>
+                            <th>Miktar</th>
+                            <th>Toplam Fiyat</th>
+                            <th>Ödeme Yöntemi</th>
+                            <th>Sipariş Durumu</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>
-                                <img class="rounded-circle" src="~/nexa/assets/images/xs/avatar1.jpg" alt="user" width="40">
-                            </td>
-                            <td>
-                                <a href="javascript:void(0);">Logan</a>
-                            </td>
-                            <td>$420</td>
-                            <td>23</td>
-                            <td>
-                                <i class="zmdi zmdi-star"></i>
-                                <i class="zmdi zmdi-star"></i>
-                                <i class="zmdi zmdi-star"></i>
-                                <i class="zmdi zmdi-star"></i>
-                                <i class="zmdi zmdi-star-outline"></i>
-                            </td>
-                            <td>
-                                <div class="progress">
-                                    <div class="progress-bar l-green" role="progressbar" aria-valuenow="87" aria-valuemin="0" aria-valuemax="100" style="width: 87%;"></div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <img class="rounded-circle" src="~/nexa/assets/images/xs/avatar2.jpg" alt="user" width="40">
-                            </td>
-                            <td>
-                                <a href="javascript:void(0);">Isabella</a>
-                            </td>
-                            <td>$350</td>
-                            <td>16</td>
-                            <td>
-                                <i class="zmdi zmdi-star"></i>
-                                <i class="zmdi zmdi-star"></i>
-                                <i class="zmdi zmdi-star"></i>
-                                <i class="zmdi zmdi-star-outline"></i>
-                                <i class="zmdi zmdi-star-outline"></i>
-                            </td>
-                            <td>
-                                <div class="progress">
-                                    <div class="progress-bar l-amber" role="progressbar" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100" style="width: 68%;"></div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <img class="rounded-circle" src="~/nexa/assets/images/xs/avatar3.jpg" alt="user" width="40">
-                            </td>
-                            <td>
-                                <a href="javascript:void(0);">Jackson</a>
-                            </td>
-                            <td>$201</td>
-                            <td>11</td>
-                            <td>
-                                <i class="zmdi zmdi-star"></i>
-                                <i class="zmdi zmdi-star"></i>
-                                <i class="zmdi zmdi-star-outline"></i>
-                                <i class="zmdi zmdi-star-outline"></i>
-                                <i class="zmdi zmdi-star-outline"></i>
-                            </td>
-                            <td>
-                                <div class="progress">
-                                    <div class="progress-bar l-parpl" role="progressbar" aria-valuenow="32" aria-valuemin="0" aria-valuemax="100" style="width:32%;"></div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <img class="rounded-circle" src="~/nexa/assets/images/xs/avatar4.jpg" alt="user" width="40">
-                            </td>
-                            <td>
-                                <a href="javascript:void(0);">Victoria</a>
-                            </td>
-                            <td>$651</td>
-                            <td>28</td>
-                            <td>
-                                <i class="zmdi zmdi-star"></i>
-                                <i class="zmdi zmdi-star"></i>
-                                <i class="zmdi zmdi-star"></i>
-                                <i class="zmdi zmdi-star"></i>
-                                <i class="zmdi zmdi-star-half"></i>
-                            </td>
-                            <td>
-                                <div class="progress">
-                                    <div class="progress-bar l-green" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%;"></div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <img class="rounded-circle" src="~/nexa/assets/images/xs/avatar5.jpg" alt="user" width="40">
-                            </td>
-                            <td>
-                                <a href="javascript:void(0);">Lucas</a>
-                            </td>
-                            <td>$300</td>
-                            <td>20</td>
-                            <td>
-                                <i class="zmdi zmdi-star"></i>
-                                <i class="zmdi zmdi-star"></i>
-                                <i class="zmdi zmdi-star"></i>
-                                <i class="zmdi zmdi-star-half"></i>
-                                <i class="zmdi zmdi-star-outline"></i>
-                            </td>
-                            <td>
-                                <div class="progress">
-                                    <div class="progress-bar l-blue" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"></div>
-                                </div>
-                            </td>
-                        </tr>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.CustomerName</td>
+                                <td>@item.ProductName</td>
+                                <td>@item.UnitPrice</td>
+                                <td>@item.Quantity</td>
+                                <td>@((item.UnitPrice * item.Quantity).ToString("N2")) €</td>
 
+                                <td>
+                                    @if (item.PaymentMethod == "Kredi Kartı")
+                                    {
+                                        <span>💳 @item.PaymentMethod</span>
+                                    }
+                                    else if (item.PaymentMethod == "Kapıda Ödeme")
+                                    {
+                                        <span>📱 @item.PaymentMethod</span>
+                                    }
+                                    else if (item.PaymentMethod == "Banka Kartı")
+                                    {
+                                        <span>🏦 @item.PaymentMethod</span>
+                                    }
+                                    else if (item.PaymentMethod == "Kapıda Ödeme")
+                                    {
+                                        <span>💻 @item.PaymentMethod</span>
+                                    }
+                                    else if (item.PaymentMethod == "EFT/Havale")
+                                    {
+                                        <span>💰 @item.PaymentMethod</span>
+                                    }
+                                    else
+                                    {
+                                        <span>⚙️ @item.PaymentMethod</span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (item.OrderStatus == "Teslim Edildi")
+                                    {
+                                        <span>✅ @item.OrderStatus</span>
+                                    }
+                                    else if (item.OrderStatus == "Kargoda" || item.OrderStatus == "Hazırlanıyor" || item.OrderStatus == "Kargoda")
+                                    {
+                                        <span>⏳ @item.OrderStatus</span>
+                                    }
+                                    else if (item.OrderStatus == "İptal Edildi")
+                                    {
+                                        <span>❌ @item.OrderStatus</span>
+                                    }
+                                    else
+                                    {
+                                        <span>⚪ @item.OrderStatus</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>

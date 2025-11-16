@@ -1,4 +1,5 @@
 ﻿using Asp.NetCore10._0_BigData_Analytics_Project.Context;
+using Asp.NetCore10._0_BigData_Analytics_Project.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,16 +24,16 @@ namespace Asp.NetCore10._0_BigData_Analytics_Project.ViewComponents.DashboardVie
                 .Include(o => o.Product)
                 .Where(o => o.OrderDate >= today && o.OrderDate < tomorrow)
                 .OrderByDescending(o => o.OrderDate)
-                .Take(10)
-                .Select(o => new
+                .Take(5)
+                .Select(o => new OrderSummaryViewModel
                 {
-                    o.OrderID,
-                    o.Product.ProductName,
+                    OrderID = o.OrderID,
+                    ProductName = o.Product.ProductName,
                     CustomerName = o.Customer.CustomerName + " " + o.Customer.CustomerSurname,
-                    o.Quantity,
-                    o.PaymentMethod,
-                    o.OrderStatus,
-                    o.OrderDate
+                    Quantity = o.Quantity,
+                    PaymentMethod = o.PaymentMethod,
+                    OrderStatus = o.OrderStatus,
+                    UnitPrice = o.Product.UnitPrice
                 })
                 .ToList();
             return View(last10Orders);
