@@ -24,3 +24,4 @@ INNER JOIN
     GROUP BY c.CustomerCountry
 ) AS t2
 ON t1.CustomerCountry = t2.CustomerCountry;
+
