@@ -25,3 +25,4 @@ INNER JOIN
 ) AS t2
 ON t1.CustomerCountry = t2.CustomerCountry;
 
+
