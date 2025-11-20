@@ -18,7 +18,7 @@ namespace Asp.NetCore10._0_BigData_Analytics_Project.ViewComponents.DashboardVie
             var preparingCount = _context.Orders.Where(x => x.OrderStatus == "Hazırlanıyor").Count();
             var canceledCount = _context.Orders.Where(x => x.OrderStatus == "İptal Edildi").Count();
             var shippedCount = _context.Orders.Where(x => x.OrderStatus == "Kargoda").Count();
-            var completedCount = _context.Orders.Where(x => x.OrderStatus == "Tamamlandı").Count();
+            var completedCount = _context.Orders.Where(x => x.OrderStatus == "Teslim Edildi").Count();
 
             var result = new List<OrderStatusChartDTO>
             {
@@ -48,7 +48,7 @@ namespace Asp.NetCore10._0_BigData_Analytics_Project.ViewComponents.DashboardVie
                 },
                 new OrderStatusChartDTO
                 {
-                    Title = "Tamamlandı",
+                    Title = "Teslim Edildi",
                     Percentage = totalOrders == 0 ? 0 : (int)Math.Round(completedCount * 100.0 / totalOrders),
                     ChangeText = "+6% Artış ⬆",
                     IsPositive = true,
