@@ -13,6 +13,7 @@
         public string CustomerImageURL { get; set; } //Müşteri Resim URL'sini Aldık
         public string CustomerAddress { get; set; } // Müşterinin Adres Bilgilerini Aldık
         public List<Order> Orders { get; set; } // Siparişi Bir liste halinde aldık ilişkiden dolayı
+        public List<Review> Reviews { get; set; } // Yorumları Bir liste halinde aldık ilişkiden dolayı
 
     }
 }

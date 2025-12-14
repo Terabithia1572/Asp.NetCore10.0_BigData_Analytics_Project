@@ -12,5 +12,6 @@
         public string CountryOfOrigin { get; set; }
         public string ProductImageURL { get; set; }
         public List<Order> Orders { get; set; }
+        public List<Review> Reviews { get; set; }
     }
 }

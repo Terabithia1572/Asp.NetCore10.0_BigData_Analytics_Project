@@ -14,6 +14,7 @@ namespace Asp.NetCore10._0_BigData_Analytics_Project.Context
         public DbSet<Product> Products { get; set; } // Ürünler tablosu için DbSet
         public DbSet<Customer> Customers { get; set; } // Müşteriler tablosu için DbSet
         public DbSet<Order> Orders { get; set; } // Siparişler tablosu için DbSet
+        public DbSet<Review> Reviews { get; set; } // Yorumlar tablosu için DbSet
 
     }
 }
