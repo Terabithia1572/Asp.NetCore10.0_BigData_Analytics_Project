@@ -1,5 +1,6 @@
 using Asp.NetCore10._0_BigData_Analytics_Project.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.ML;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,8 @@ builder.Services.AddDbContext<BigDataOrdersDBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("BigDataOrdersConnectionString")); //Veritabaný baðlantý dizesi
 });
+
+builder.Services.AddScoped<MLContext>(); // MLContext servisi ekleme
 
 var app = builder.Build();
 
