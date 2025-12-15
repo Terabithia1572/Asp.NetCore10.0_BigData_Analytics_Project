@@ -2,6 +2,7 @@
 using Asp.NetCore10._0_BigData_Analytics_Project.DTOs.ForecastDTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.ML;
+using Microsoft.ML.Transforms.TimeSeries;
 
 namespace Asp.NetCore10._0_BigData_Analytics_Project.Controllers
 {
@@ -54,9 +55,34 @@ namespace Asp.NetCore10._0_BigData_Analytics_Project.Controllers
                        OrderCount = x.OrderCount // Sipariş Sayısı
                    }).ToList(); // Listeye dönüştürme
                 var dataView = _mlContext.Data.LoadFromEnumerable(methodData); // Veriyi ML.NET DataView formatına dönüştürme
+                                                                               //Forecast Modeli
+                var pipeline = _mlContext.Forecasting.ForecastBySsa( // Zaman Serisi Tahmin Modeli
+                    outputColumnName: "ForecastedValues", // Çıkış Kolonu
+                    inputColumnName: nameof(PaymentForecastData.OrderCount), // Giriş Kolonu
+                    windowSize: 4, // 
+                    seriesLength: methodData.Count, // Seri Uzunluğu
+                    trainSize: methodData.Count, // Eğitim Verisi Boyutu
+                    horizon: 3, // Tahmin Edilecek Adım Sayısı
+                    confidenceLevel: 0.95f // Güven Seviyesi
+                    );
+                var model = pipeline.Fit(dataView); // Modelin Eğitilmesi
+                var engine = model.CreateTimeSeriesEngine<PaymentForecastData, PaymentForecastPrediction>(_mlContext); // Tahmin Motorunun Oluşturulması
+                var prediction = engine.Predict(); // Tahminin Yapılması
 
-                return View();
+                //2026 Yılı Ocak Şubat Mart Ayı Tahminleri
+
+                for (int i = 0; i < prediction.ForecastedValues.Length; i++) // Tahmin Sonuçlarının İşlenmesi
+                {
+                    forecasts.Add(new // Tahmin Sonuçlarının Listeye Eklenmesi
+                    {
+                        PaymentMethod = method, // Ödeme Yöntemi
+                        Month = new DateTime(2026, i + 1, 1).ToString("yyyy MMM"), // Ay
+                        ForecastedCount = (int)prediction.ForecastedValues[i] // Tahmin Edilen Sipariş Sayısı
+                    });
+                }
+
             }
+                return View(forecasts); // Tahmin Sonuçlarının Görüntülenmesi
+        }
         }
     }
-}
