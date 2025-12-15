@@ -1,5 +1,5 @@
 ﻿using Asp.NetCore10._0_BigData_Analytics_Project.Context;
-using Asp.NetCore10._0_BigData_Analytics_Project.DTOs;
+using Asp.NetCore10._0_BigData_Analytics_Project.DTOs.ChartDTOs;
 using Asp.NetCore10._0_BigData_Analytics_Project.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

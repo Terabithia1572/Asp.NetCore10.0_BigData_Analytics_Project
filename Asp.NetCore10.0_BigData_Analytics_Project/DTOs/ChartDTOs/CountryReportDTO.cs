@@ -1,4 +1,4 @@
-﻿namespace Asp.NetCore10._0_BigData_Analytics_Project.DTOs
+﻿namespace Asp.NetCore10._0_BigData_Analytics_Project.DTOs.ChartDTOs
 {
     public class CountryReportDTO
     {
