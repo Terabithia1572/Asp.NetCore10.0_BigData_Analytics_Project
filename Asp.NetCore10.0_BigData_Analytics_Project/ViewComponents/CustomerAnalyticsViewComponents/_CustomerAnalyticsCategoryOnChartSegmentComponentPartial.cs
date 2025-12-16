@@ -51,6 +51,58 @@ namespace Asp.NetCore10._0_BigData_Analytics_Project.ViewComponents.CustomerAnal
             }
 
             #endregion
+
+            #region Charts
+            //Tüm Siparişleri Kategori Adı ve Yıla Göre Gruplama İşlemi
+            var categoryData = _context.Orders
+                .Include(o => o.Product)
+                .ThenInclude(p => p.Category)
+                .AsEnumerable()
+                .GroupBy(o => new
+                {
+                    Year = o.OrderDate.Year,
+                    CategoryName = o.Product.Category.CategoryName
+                })
+                .Select(g => new
+                {
+                    Year = g.Key.Year,
+                    CategoryName = g.Key.CategoryName,
+                    OrderCount = g.Count()
+                })
+                .OrderBy(x => x.Year)
+                .ToList();
+
+            //Her Bir Kategorinin Toplam Satış Sayısı
+
+            var topCategories = categoryData
+                .GroupBy(x => x.CategoryName)
+                .Select(g => new
+                {
+                    CategoryName = g.Key,
+                    TotalOrders = g.Sum(x => x.OrderCount)
+                })
+                .OrderByDescending(x => x.TotalOrders)
+                .Take(5)
+                .Select(x => x.CategoryName)
+                .ToList();
+
+            //Sadece bu 5 kategoriye ait verilerin listesi
+
+            var filteredData = categoryData
+                .Where(x => topCategories.Contains(x.CategoryName)).ToList();
+
+            var years = filteredData.Select(x => x.Year).Distinct().OrderBy(x => x).ToList();
+
+            var chartSeries = topCategories.Select(category => new
+            {
+                name = category,
+                data = years.Select(y => filteredData.FirstOrDefault(cd => cd.CategoryName == category && cd.Year == y)?.OrderCount ?? 0).ToList()
+            }).ToList();
+
+            ViewBag.Years = years;
+            ViewBag.Series = chartSeries;
+
+            #endregion
             return View();
         }
     }
