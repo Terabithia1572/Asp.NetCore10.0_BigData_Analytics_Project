@@ -1,6 +1,7 @@
 ﻿using Asp.NetCore10._0_BigData_Analytics_Project.Context;
 using Asp.NetCore10._0_BigData_Analytics_Project.DTOs.ForecastDTOs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.ML;
 using Microsoft.ML.Transforms.TimeSeries;
 
@@ -82,7 +83,38 @@ namespace Asp.NetCore10._0_BigData_Analytics_Project.Controllers
                 }
 
             }
-                return View(forecasts); // Tahmin Sonuçlarının Görüntülenmesi
+            return View(forecasts); // Tahmin Sonuçlarının Görüntülenmesi
         }
+
+        public IActionResult GermanyCitiesForecast()
+        {
+            var startDate = new DateTime(2023, 1, 1);
+            var endDate = new DateTime(2025, 12, 31);
+
+            var germanyCityData = _context.Orders
+                .Include(o => o.Customer)
+                .Where(o => o.OrderDate >= startDate && o.OrderDate <= endDate && o.Customer.CustomerCountry == "Almanya")
+                .AsEnumerable()
+                .GroupBy(o => new
+                {
+                    o.Customer.CustomerCity,
+                    Year = o.OrderDate.Year,
+                    Month = o.OrderDate.Month
+                })
+                .Select(g => new
+                {
+                    City = g.Key.CustomerCity,
+                    Year = g.Key.Year,
+                    Month = g.Key.Month,
+                    DateKey = $"{g.Key.Year}-{g.Key.Month:D2}",
+                    OrderCount = g.Count()
+                })
+                .OrderBy(xP => xP.City)
+                .ThenBy(x => x.DateKey)
+                .ToList();
+
+            return View();
         }
     }
+}
+
