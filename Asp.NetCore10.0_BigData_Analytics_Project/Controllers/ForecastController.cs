@@ -113,7 +113,58 @@ namespace Asp.NetCore10._0_BigData_Analytics_Project.Controllers
                 .ThenBy(x => x.DateKey)
                 .ToList();
 
-            return View();
+            var forecasts = new List<object>();
+
+            foreach (var city in germanyCityData.Select(x => x.City).Distinct())
+            {
+                var cityData = germanyCityData
+                    .Where(x => x.City == city)
+                    .Select((x, index) => new GermanyCitiesForecastData
+                    {
+                        City = city,
+                        MonthIndex = index + 1,
+                        OrderCount = x.OrderCount
+                    }).ToList();
+
+                if (cityData.Count < 4)
+                    continue;
+
+                var dataView = _mlContext.Data.LoadFromEnumerable(cityData);
+
+                var pipeline = _mlContext.Forecasting.ForecastBySsa(
+                    outputColumnName: "ForecastedValues",
+                    inputColumnName: nameof(GermanyCitiesForecastData.OrderCount),
+                    windowSize: 12,
+                    seriesLength: cityData.Count,
+                    trainSize: cityData.Count,
+                    horizon: 12,
+                    confidenceLevel: 0.95f
+                    );
+
+                var model = pipeline.Fit(dataView);
+                var engine = model.CreateTimeSeriesEngine<GermanyCitiesForecastData, GermanyCitiesForecastPrediction>(_mlContext);
+
+                var prediction = engine.Predict();
+
+                var yearlyForecast = (int)prediction.ForecastedValues.Sum();
+
+                var year2024Count = germanyCityData
+                    .Where(x => x.City == city && x.Year == 2024)
+                    .Sum(x => x.OrderCount);
+
+                var year2025Count = germanyCityData
+                    .Where(x => x.City == city && x.Year == 2025)
+                    .Sum(x => x.OrderCount);
+
+                var diff = yearlyForecast - year2025Count;
+                double? growthRate = year2025Count > 0
+                    ? (diff / (double)year2025Count) * 100.0
+                    : (double?)null;
+
+
+              
+            }
+            return View(forecasts);
         }
     }
 }
