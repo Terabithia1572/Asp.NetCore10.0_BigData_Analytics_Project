@@ -161,8 +161,18 @@ namespace Asp.NetCore10._0_BigData_Analytics_Project.Controllers
                     ? (diff / (double)year2025Count) * 100.0
                     : (double?)null;
 
+                forecasts.Add(new
+                {
+                    City = city,
+                    Year2024 = year2024Count,
+                    Year2025 = year2025Count,
+                    Year = "2026",
+                    ForecastedCount = yearlyForecast,
+                    DiffTo2025 = diff,
+                    GrowthRate = growthRate
+                });
 
-              
+
             }
             return View(forecasts);
         }
