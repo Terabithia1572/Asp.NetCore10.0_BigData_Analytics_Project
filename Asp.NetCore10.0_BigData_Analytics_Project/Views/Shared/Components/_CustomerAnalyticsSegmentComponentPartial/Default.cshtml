@@ -1,4 +1,10 @@
-﻿
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿<div class="row clearfix">
+    <div class="col-lg-8 col-md-12">
+        @await Component.InvokeAsync("_CustomerAnalyticsCategoryOnChartSegmentComponentPartial")
+
+        @* @await Component.InvokeAsync("_CustomerAnalyticsStatisticsComponentPartial") *@
+
+
+    </div>
+    @* @await Component.InvokeAsync("_CustomerAnalyticsCustomerCitiesComponentPartial") *@
+</div>
