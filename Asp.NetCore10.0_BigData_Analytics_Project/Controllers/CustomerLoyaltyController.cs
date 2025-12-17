@@ -10,7 +10,7 @@ namespace Asp.NetCore10._0_BigData_Analytics_Project.Controllers
     public class CustomerLoyaltyController : Controller
     {
         private readonly BigDataOrdersDBContext _context;
-
+        private readonly string _modelPath = "wwwroot/mlmodels/LoyaltyScoreModel.zip";
         public CustomerLoyaltyController(BigDataOrdersDBContext context)
         {
             _context = context;
@@ -107,14 +107,79 @@ namespace Asp.NetCore10._0_BigData_Analytics_Project.Controllers
                   double frequency = c.Orders.Count();
                   double monetary = Math.Round(c.Orders.Sum(o => o.Quantity * o.Product.UnitPrice), 2);
 
+                  //Loyalty Score ağırlıklı ortalamanın bulunması
 
+                  double loyalty = (RecencyScore(recency) * 0.4) +
+                                 (FrequencyScore(frequency) * 0.3) +
+                                 (MonetaryScore(monetary) * 0.3);
 
-              })
-              return View();
+                  //ML .Net'e gidecek Veri Listesi
+
+                  return new LoyaltyScoreMLDataDTO
+                  {
+                      CustomerName = c.CustomerName + " " + c.CustomerSurname,
+                      Recency = (float)recency,
+                      Frequency = (float)frequency,
+                      Monetary = (float)monetary,
+                      LoyaltyScore = (float)loyalty
+                  };
+              }).ToList();
+
+            //ML İşlemleri
+
+            var mlContext = new MLContext();
+            IDataView dataView = mlContext.Data.LoadFromEnumerable(data);
+
+            //Pipeline
+            /*var pipeline = mlContext.Transforms
+                .Concatenate("Features", "Recency", "Frequency", "Monetary")
+                .Append(mlContext.Regression.Trainers.Sdca(
+                    labelColumnName: "LoyaltyScore",
+                    maximumNumberOfIterations: 100));*/
+
+            var pipeline = mlContext.Transforms
+                    .Concatenate("Features", "Recency", "Frequency", "Monetary")
+                    .Append(mlContext.Transforms.NormalizeMinMax("Features")) // 🔥 Ölçekleme eklendi
+                    .Append(mlContext.Regression.Trainers.Sdca(
+                        labelColumnName: "LoyaltyScore",
+                        maximumNumberOfIterations: 100));
+
+            //Modeli Eğitme
+            var model = pipeline.Fit(dataView);
+
+            //Modeli Kaydet
+            mlContext.Model.Save(model, dataView.Schema, _modelPath);
+
+            //Tahmin Metodu
+            var predictionEngine = mlContext.Model.CreatePredictionEngine<LoyaltyScoreMLDataDTO, LoyaltyScoreMLPredictionDTO>(model);
+
+            //Her müşteri için ML .Net Tahmini
+            var results = data.Select(x =>
+            {
+                var prediction = predictionEngine.Predict(new LoyaltyScoreMLDataDTO
+                {
+                    Recency = x.Recency,
+                    Frequency = x.Frequency,
+                    Monetary = x.Monetary
+                });
+
+                return new ResultLoyaltyScoreMLDTO
+                {
+                    CustomerName = x.CustomerName,
+                    Recency = x.Recency,
+                    Frequency = x.Frequency,
+                    Monetary = x.Monetary,
+                    ActualLoyaltyScore = Math.Round(x.LoyaltyScore, 2),
+                    PredictedLoyaltyScore = Math.Round(prediction.LoyaltyScore, 2)
+                };
+            }).OrderByDescending(x => x.PredictedLoyaltyScore).ToList();
+
+            return View(results);
         }
-    
+
+
         //Yardımcı Skor Metotlarının Hazırlanması
-          private static double RecencyScore(double days) => days switch
+        private static double RecencyScore(double days) => days switch
           {
               <= 30 => 100,
               <= 90 => 75,
@@ -122,5 +187,23 @@ namespace Asp.NetCore10._0_BigData_Analytics_Project.Controllers
               <= 365 => 25,
               _ => 10
           };
+        private static double FrequencyScore(double orders) => orders switch
+        {
+            >= 20 => 100,
+            >= 10 => 80,
+            >= 5 => 60,
+            >= 2 => 40,
+            1 => 20,
+            _ => 10
+        };
+        private static double MonetaryScore(double spent) => spent switch
+        {
+            >= 5000 => 100,
+            >= 3000 => 80,
+            >= 1000 => 60,
+            >= 500 => 40,
+            >= 100 => 20,
+            _ => 10
+        };
     }
 }
