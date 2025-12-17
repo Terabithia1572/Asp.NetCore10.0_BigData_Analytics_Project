@@ -1,7 +1,9 @@
 ﻿using Asp.NetCore10._0_BigData_Analytics_Project.Context;
 using Asp.NetCore10._0_BigData_Analytics_Project.DTOs.LoyaltyDTOs;
+using Asp.NetCore10._0_BigData_Analytics_Project.DTOs.LoyaltyMLDTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.ML;
 
 namespace Asp.NetCore10._0_BigData_Analytics_Project.Controllers
 {
@@ -76,5 +78,49 @@ namespace Asp.NetCore10._0_BigData_Analytics_Project.Controllers
                  }).OrderByDescending(x => x.LoyaltyScore).ToList();
             return View(loyaltScores);
         }
+        public IActionResult ItalyLoyaltyScoreWithML()
+        {
+            //İtalya'daki Belli Şehirlerin Sipariş Listesi
+            var data = _context.Customers
+              .Include(c => c.Orders)
+              .ThenInclude(o => o.Product)
+              .Where(c => c.CustomerCountry == "İtalya" &&
+              (c.CustomerCity == "Parma" ||
+               c.CustomerCity == "Bologna" ||
+               c.CustomerCity == "Como" ||
+               c.CustomerCity == "Siena" ||
+               c.CustomerCity == "Verona" ||
+               c.CustomerCity == "Bergamo" ||
+               c.CustomerCity == "Bari" ||
+               c.CustomerCity == "Venedik"))
+              .AsEnumerable()
+              .Select(c =>
+              {
+                  //Müşterinin Son Sipariş Tarihini Bul
+                  var lastOrderDate = c.Orders.Max(o => (DateTime?)o.OrderDate);
+
+                  //Son siparişin üzerinden kaç gün geçtiğini hesaplama 
+                  var daySince = lastOrderDate.HasValue ? Math.Round((DateTime.Now - lastOrderDate.Value).TotalDays) : 999;
+
+                  //Rfm Metrikleri
+                  double recency = daySince;
+                  double frequency = c.Orders.Count();
+                  double monetary = Math.Round(c.Orders.Sum(o => o.Quantity * o.Product.UnitPrice), 2);
+
+
+
+              })
+              return View();
+        }
+    
+        //Yardımcı Skor Metotlarının Hazırlanması
+          private static double RecencyScore(double days) => days switch
+          {
+              <= 30 => 100,
+              <= 90 => 75,
+              <= 180 => 50,
+              <= 365 => 25,
+              _ => 10
+          };
     }
 }
