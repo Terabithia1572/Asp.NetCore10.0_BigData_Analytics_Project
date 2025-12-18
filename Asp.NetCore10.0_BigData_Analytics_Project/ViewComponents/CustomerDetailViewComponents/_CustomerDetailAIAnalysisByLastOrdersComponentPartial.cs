@@ -131,8 +131,14 @@ Veri:
                 .GetProperty("content")
                 .GetString();
 
-             ViewBag.Customer = $"{customer.CustomerName} {customer.CustomerSurname}";
-              ViewBag.Analysis = completion;
+            string[] sections = completion.Split("<h4>");
+
+            ViewBag.AnalysisSection1 = "<h4>" + sections.ElementAtOrDefault(1);
+            ViewBag.AnalysisSection2 = "<h4>" + sections.ElementAtOrDefault(2);
+            ViewBag.AnalysisSection3 = "<h4>" + sections.ElementAtOrDefault(3);
+            ViewBag.AnalysisSection4 = "<h4>" + sections.ElementAtOrDefault(4);
+            ViewBag.AnalysisSection5 = "<h4>" + sections.ElementAtOrDefault(5);
+            ViewBag.AnalysisSection6 = "<h4>" + sections.ElementAtOrDefault(6);
 
 
             return View();
