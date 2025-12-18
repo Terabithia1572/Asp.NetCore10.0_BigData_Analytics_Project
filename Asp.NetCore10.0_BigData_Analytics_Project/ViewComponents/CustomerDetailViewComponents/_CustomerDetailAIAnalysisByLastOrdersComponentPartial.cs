@@ -123,6 +123,17 @@ Veri:
             var response = await httpClient.PostAsync("https://api.openai.com/v1/chat/completions", content);
             var responseString = await response.Content.ReadAsStringAsync();
 
+            //Json Cevabı Ayrıştır
+            var doc = JsonDocument.Parse(responseString);
+            var completion = doc.RootElement
+                .GetProperty("choices")[0]
+                .GetProperty("message")
+                .GetProperty("content")
+                .GetString();
+
+             ViewBag.Customer = $"{customer.CustomerName} {customer.CustomerSurname}";
+              ViewBag.Analysis = completion;
+
 
             return View();
         }
