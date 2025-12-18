@@ -12,6 +12,7 @@ builder.Services.AddDbContext<BigDataOrdersDBContext>(options =>
 });
 
 builder.Services.AddScoped<MLContext>(); // MLContext servisi ekleme
+builder.Services.AddHttpClient(); // IHttpClientFactory servisi ekleme
 
 var app = builder.Build();
 
