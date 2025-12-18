@@ -1,6 +1,8 @@
 ﻿using Asp.NetCore10._0_BigData_Analytics_Project.Context;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Text.Json;
 
 namespace Asp.NetCore10._0_BigData_Analytics_Project.ViewComponents.CustomerDetailViewComponents
@@ -99,6 +101,30 @@ Bu başlıkları kullan (sırasını ve isimleri değiştirme):
 Veri:
 {jsonData}
 ";
+            //OpenAI Api İsteği
+            var httpClient = _httpClientFactory.CreateClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "ApiKey");
+
+            var requestBody = new
+            {
+                model = "gpt-4o-mini",
+                messages = new[]
+                {
+                    new {role="system",content="You are a senior marketing data analyst."},
+                    new {role="user",content=prompt},
+                },
+                temperature = 0.5
+            };
+
+            var jsonRequest = JsonSerializer.Serialize(requestBody);
+            var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+
+            //İsteği Gönderme
+            var response = await httpClient.PostAsync("https://api.openai.com/v1/chat/completions", content);
+            var responseString = await response.Content.ReadAsStringAsync();
+
+
+            return View();
         }
     }
 }
