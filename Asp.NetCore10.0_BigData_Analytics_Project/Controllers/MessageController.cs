@@ -66,7 +66,7 @@ namespace Asp.NetCore10._0_BigData_Analytics_Project.Controllers
             var apiKey = "ApiKey";
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
 
-            client.DefaultRequestHeaders.Add("User-Agent", "MuratApp/1.0");
+            client.DefaultRequestHeaders.Add("User-Agent", "YunusApp/1.0");
             client.DefaultRequestHeaders.Add("Accept", "application/json");
 
             try
