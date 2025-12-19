@@ -3,7 +3,7 @@
 
         <div class="navbar-header">
             <a href="javascript:void(0);" class="bars"></a>
-            <a class="navbar-brand" href="index.html">Veri Analizi</a>
+            <a class="navbar-brand" href="/Dashboard/Index/">Veri Analizi</a>
         </div>
 
        @await Component.InvokeAsync("_NavbarQuickMenuComponentPartial") <!--Burada navbarda bulunan hızlı erişim kodlarını tuttuk yani Blog,Contacts Chat gibi uygulamarın olduğu yer-->
@@ -12,7 +12,7 @@
             @await Component.InvokeAsync("_NavbarNotificationComponentPartial") <!--Burada navbarda bulunan bildirim kodlarını tuttuk yani yeni üye, yeni sipariş gibi bildirimlerin olduğu yer-->
             @await Component.InvokeAsync("_NavbarTasksComponentPartial") <!--Burada navbarda bulunan görev kodlarını tuttuk yani görevlerin olduğu yer-->
 
-            <li><a href="sign-in.html" class="mega-menu xs-hide" data-close="true"><i class="zmdi zmdi-power"></i></a></li>
+            <li><a href="/Dashboard/Index/" class="mega-menu xs-hide" data-close="true"><i class="zmdi zmdi-power"></i></a></li>
             <li class=""><a href="javascript:void(0);" class="js-right-sidebar" data-close="true"><i class="zmdi zmdi-settings zmdi-hc-spin"></i></a></li>
         </ul>
     </div>
